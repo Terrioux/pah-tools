@@ -23,5 +23,5 @@ else:
   i = 0
   for s in k.get_kekule_structures():
     output_filename = sys.argv[1]+"_kekule"+str(i)+".dot"
-    s.save("toto"+str(i)+".dot")
+    s.save(output_filename)
     i += 1
