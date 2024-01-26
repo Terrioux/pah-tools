@@ -1,0 +1,4 @@
+*.dot
+*.log
+__pycache__
+
