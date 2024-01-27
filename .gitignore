@@ -1,4 +1,5 @@
 *.dot
 *.log
+*.xml
 __pycache__
 
