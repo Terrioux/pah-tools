@@ -56,19 +56,19 @@ class Kekule_Structure():
         if v in path:
           pos = path.index(v)
           circuit = path[pos:]  # we define the found conjugated circuit
-
-          # we check whether this circuit is new
-          if len(circuit) in self.__conjugated_circuits:
-            i = 0
-            while i < len(self.__conjugated_circuits[len(circuit)]) and set(circuit) != set(self.__conjugated_circuits[len(circuit)][i]):
-              i += 1
-            if i == len(self.__conjugated_circuits[len(circuit)]):
-              # we have a new circuit
-              self.__conjugated_circuits[len(circuit)].append(circuit[circuit.index(min(circuit)):]+circuit[:circuit.index(min(circuit)):])
-          else:
-            # we have a new circuit (with a new size)
-            self.__conjugated_circuits[len(circuit)] = [circuit[circuit.index(min(circuit)):]+circuit[:circuit.index(min(circuit)):]]
-
+          
+          if len(circuit) % 2 == 0:
+            # only even circuits are considered
+            if len(circuit) in self.__conjugated_circuits:  # we check whether this circuit is new
+              i = 0
+              while i < len(self.__conjugated_circuits[len(circuit)]) and set(circuit) != set(self.__conjugated_circuits[len(circuit)][i]):
+                i += 1
+              if i == len(self.__conjugated_circuits[len(circuit)]):
+                # we have a new circuit
+                self.__conjugated_circuits[len(circuit)].append(circuit[circuit.index(min(circuit)):]+circuit[:circuit.index(min(circuit)):])
+            else:
+              # we have a new circuit (with a new size)
+              self.__conjugated_circuits[len(circuit)] = [circuit[circuit.index(min(circuit)):]+circuit[:circuit.index(min(circuit)):]]
         else:
           self.find_conjugated_circuits_rec (path+[v])
 
