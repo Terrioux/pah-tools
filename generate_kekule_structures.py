@@ -19,7 +19,7 @@ else:
   # we print their number
   print ("# Kekulé structures:",k.get_kekule_structures_number())
 
-  # we same the Kekulé structures
+  # we save the Kekulé structures
   i = 0
   for s in k.get_kekule_structures():
     output_filename = sys.argv[1]+"_kekule"+str(i)+".dot"

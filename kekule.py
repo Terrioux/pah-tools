@@ -27,6 +27,7 @@ class Kekule:
           scope.append(bounds[self.__edges.index((x,y))])
         else:
           scope.append(bounds[self.__edges.index((y,x))])
+      
       satisfy (sum (scope) == 1)
   
     self.__result = solve (sols = ALL)

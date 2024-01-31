@@ -12,6 +12,13 @@ else:
   # we read the molecule
   d = Dot_Reader(sys.argv[1])
   g = d.read()
+  
+  cycles = g.find_cycles()
+  for a in sorted(cycles.keys()):
+    for p in cycles[a]:
+      print (p)
+  # faire un test d'inclusion, si max > 2 suppr
+
 
   # we compute the Kekulé structures
   k = Kekule(g)

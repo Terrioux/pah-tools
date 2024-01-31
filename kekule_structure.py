@@ -10,6 +10,7 @@ class Kekule_Structure():
     
     for edge,label in labelling:
       self.__g.set_edge_label (edge[0],edge[1],label)
+      self.__g.set_edge_label (edge[1],edge[0],label)
       
     self.__conjugated_circuits = {}
 
@@ -20,7 +21,7 @@ class Kekule_Structure():
     myfile = open (filename,"w")
 
     # we write the header
-    myfile.write("strict graph {")
+    myfile.write("strict graph {\n")
     
     # we write the edges
     for edge in self.__g.get_edges():

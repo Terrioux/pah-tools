@@ -49,9 +49,9 @@ class Graph:
   def add_edge (self,x,y) -> None:
     """ adds the edge {x,y} to the graph with a None label """
     if not self.is_edge(x,y):
-       self.__adjacency_list[x][y] = None
-       self.__adjacency_list[y][x] = None
-       self.__m = self.__m + 1
+      self.__adjacency_list[x][y] = None
+      self.__adjacency_list[y][x] = None
+      self.__m = self.__m + 1
 
 
   def get_neighbors (self,x) -> list:
@@ -82,7 +82,6 @@ class Graph:
       if y in self.__adjacency_list:
         if y in self.__adjacency_list[x]:
           self.__adjacency_list[x][y] = l
-          self.__adjacency_list[y][x] = l
         else:
           raise ValueError("Unknown edge {"+str(x)+","+str(y)+"}")
       else:
@@ -114,3 +113,33 @@ class Graph:
       g.add_edge(edge[0],edge[1])
       g.set_edge_label(edge[0],edge[1],self.get_edge_label(edge[0],edge[1]))
     return g
+
+
+  def find_cycles (self) -> list:
+    """ returns the list of the cycles of the graph """
+    self.__cycles = {}
+    self.find_cycles_rec ([self.get_vertices()[0]])    # we start with the first vertex (this choice is arbitrary)
+        
+    return self.__cycles
+  
+  
+  def find_cycles_rec (self, path):
+    """ extends the current path with the aim of finding new cycles """
+    for v in self.get_neighbors(path[-1]):
+      if v in path:
+        pos = path.index(v)
+        cycle = path[pos:]  # we define the found cycle
+        if len(cycle) > 2:
+          if len(cycle) in self.__cycles:  # we check whether this cycle is new
+            i = 0
+            while i < len(self.__cycles[len(cycle)]) and set(cycle) != set(self.__cycles[len(cycle)][i]):
+              i += 1
+            if i == len(self.__cycles[len(cycle)]):
+              # we have a new cycle
+              self.__cycles[len(cycle)].append(cycle[cycle.index(min(cycle)):]+cycle[:cycle.index(min(cycle)):])
+          else:
+            # we have a new cycle (with a new size)
+            self.__cycles[len(cycle)] = [cycle[cycle.index(min(cycle)):]+cycle[:cycle.index(min(cycle)):]]
+      else:
+        self.find_cycles_rec (path+[v])
+
