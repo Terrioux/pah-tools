@@ -22,7 +22,7 @@ class Dot_Reader:
     line = myfile.readline()
     while line :
       if len(line) > 3:
-        edge = line.replace("\n","").split(" ")[0::2]
+        edge = [x for x in line.replace("\n","").split(" ") if x.isalnum()]
         
         for v in edge:
           if not g.is_vertex(v):
