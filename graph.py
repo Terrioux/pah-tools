@@ -143,3 +143,73 @@ class Graph:
       else:
         self.find_cycles_rec (path+[v])
 
+
+  def find_restricted_cycles (self, lim) -> list:
+    """ returns the list of the cycles of the graph which have a length at most lim """
+    self.__cycles = {}
+    for x in self.get_vertices():
+      self.find_restricted_cycles_rec ([x], lim)    # we start with the first vertex (this choice is arbitrary)
+        
+    return self.__cycles
+  
+  
+  def find_restricted_cycles_rec (self, path, lim):
+    """ extends the current path with the aim of finding new cycles which have a length at most lim """
+    for v in self.get_neighbors(path[-1]):
+      if v in path:
+        pos = path.index(v)
+        cycle = path[pos:]  # we define the found cycle
+        if 2 < len(cycle) <= lim:
+          if len(cycle) in self.__cycles:  # we check whether this cycle is new
+            i = 0
+            while i < len(self.__cycles[len(cycle)]) and set(cycle) != set(self.__cycles[len(cycle)][i]):
+              i += 1
+            if i == len(self.__cycles[len(cycle)]):
+              # we have a new cycle
+              c = cycle[cycle.index(min(cycle)):]+cycle[:cycle.index(min(cycle)):]
+              if c not in self.__cycles[len(cycle)]:
+                self.__cycles[len(cycle)].append(c)
+          else:
+            # we have a new cycle (with a new size)
+            self.__cycles[len(cycle)] = [cycle[cycle.index(min(cycle)):]+cycle[:cycle.index(min(cycle)):]]
+      else:
+        if len(path) < lim:
+          self.find_restricted_cycles_rec (path+[v],lim)
+
+
+  def is_benzenoid (self):
+    """ returns True if the graph corresponds to a benzenoid, False otherwise """ 
+    # we intialize the data structure
+    cycle_size_per_edge = {}
+    for edge in self.get_edges():
+      cycle_size_per_edge[edge] = self.__n + 1
+
+    # we compute all the cycles
+    self.find_restricted_cycles(6)
+    
+    # we consider the cycles
+    for length in sorted(self.__cycles.keys()):
+      if length < 6:
+        return False
+      elif length == 6:
+        for cycle in self.__cycles[length]:
+          for i in range(length):
+            j = (i+1) % length
+            if cycle[i] < cycle[j]:
+              a,b = cycle[i], cycle[j]
+            else:
+              a,b = cycle[j], cycle[i]
+            if cycle_size_per_edge[a,b] > length:
+               cycle_size_per_edge[a,b] = length
+    
+        return all([cycle_size_per_edge[edge] == 6 for edge in cycle_size_per_edge])
+      else:
+        return False
+    
+
+  def get_hexagon_number (self):
+    """ returns the number of hexagons (i.e. cycles of size 6) in the graph """
+    if len(self.__cycles) == 0:
+      self.find_restricted_cycles(6)
+      
+    return len(self.__cycles[6])

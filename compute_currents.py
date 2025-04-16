@@ -92,4 +92,3 @@ else:
   # we save the graph with information about currents
   save (g,sys.argv[1]+"_currents.dot")
 
-s
